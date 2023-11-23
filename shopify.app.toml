@@ -1,0 +1,28 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "abondoned-cart-checkout"
+client_id = "ab6543de2340118876425ce9a2ed38f3"
+application_url = "https://knowledge-single-textbooks-las.trycloudflare.com"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products,read_orders"
+
+[auth]
+redirect_urls = [
+  "https://knowledge-single-textbooks-las.trycloudflare.com/auth/callback",
+  "https://knowledge-single-textbooks-las.trycloudflare.com/auth/shopify/callback",
+  "https://knowledge-single-textbooks-las.trycloudflare.com/api/auth/callback",
+  "https://knowledge-single-textbooks-las.trycloudflare.com/.shopify/graphiql/auth/callback"
+]
+
+[webhooks]
+api_version = "2023-10"
+
+[pos]
+embedded = false
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "first-development-store-ashraf.myshopify.com"
