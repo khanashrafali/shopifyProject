@@ -10,6 +10,9 @@ import {
   EmptyState,
   Toast,
   Frame,
+  Stack,
+  InlineStack,
+  ButtonGroup,
 } from "@shopify/polaris";
 import { CartDownFilledMajor } from "@shopify/polaris-icons";
 import { authenticate } from "../shopify.server";
@@ -19,14 +22,19 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow";
 export const loader = async ({ request }) => {
   const { admin, session } = await authenticate.admin(request);
   const data = await getAbondonedCarts(admin, session);
-  return json({ carts: data?.checkouts });
+  return json({ carts: data });
 };
 
 export async function action({ request, params }) {
   const abandonedCartData = { ...Object.fromEntries(await request.formData()) };
+  const checkoutData = {
+    customerId: abandonedCartData.customerId,
+    checkoutId: abandonedCartData.checkoutId,
+  };
   const data = await sendSms(
     abandonedCartData.messageContent,
-    abandonedCartData.phone
+    abandonedCartData.phone,
+    checkoutData
   );
   redirect("/app");
   return json(data);
@@ -50,6 +58,8 @@ const CartTable = ({ carts, loadingState, handleLoadingState }) => (
       { title: "Product Details" },
       { title: "Cart Value" },
       { title: "Cart Creation" },
+      { title: "Sent Count" },
+      { title: "Last Sent Date" },
       { title: "Action" },
     ]}
     selectable={false}
@@ -77,6 +87,8 @@ const CartTableRow = ({ cart, loadingState, handleLoadingState }) => {
       const data = {
         messageContent,
         phone: cart.customer?.phone,
+        customerId: cart.customer.id,
+        checkoutId: cart.id,
       };
       await submit(data, { method: "post" });
     } catch (error) {
@@ -96,18 +108,37 @@ const CartTableRow = ({ cart, loadingState, handleLoadingState }) => {
         <IndexTable.Cell>
           {formatDistanceToNow(new Date(cart.created_at), { addSuffix: true })}
         </IndexTable.Cell>
+        <IndexTable.Cell>{cart.urlSentCount}</IndexTable.Cell>
         <IndexTable.Cell>
-          {cart.customer.phone && (
+          {cart.lastSentDate
+            ? formatDistanceToNow(new Date(cart.lastSentDate), {
+                addSuffix: true,
+              })
+            : "Not Sent Yet"}
+        </IndexTable.Cell>
+        <IndexTable.Cell>
+          <ButtonGroup>
+            {cart.customer.phone && (
+              <Button
+                loading={loadingState === cart.id}
+                disabled={loadingState !== null && loadingState !== cart.id}
+                onClick={() => handleSave(cart)}
+                variant="primary"
+                tone="success"
+              >
+                Send Url
+              </Button>
+            )}
             <Button
               loading={loadingState === cart.id}
               disabled={loadingState !== null && loadingState !== cart.id}
-              onClick={() => handleSave(cart)}
               variant="primary"
               tone="success"
+              // url={`checkout/${}`}
             >
-              Send Url
+              Checkout History
             </Button>
-          )}
+          </ButtonGroup>
         </IndexTable.Cell>
       </IndexTable.Row>
     </>

@@ -20,3 +20,10 @@ model Session {
   accessToken String
   userId      BigInt?
 }
+
+model CheckoutUrlHistoryData {
+  id        Int       @id @default(autoincrement())
+  customerId String
+  checkoutId String
+  sentAt    DateTime  @default(now())
+}

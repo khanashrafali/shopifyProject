@@ -2,7 +2,7 @@
 
 name = "abondoned-cart-checkout"
 client_id = "ab6543de2340118876425ce9a2ed38f3"
-application_url = "https://knowledge-single-textbooks-las.trycloudflare.com"
+application_url = "https://performed-april-combination-twin.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -11,10 +11,10 @@ scopes = "write_products,read_orders"
 
 [auth]
 redirect_urls = [
-  "https://knowledge-single-textbooks-las.trycloudflare.com/auth/callback",
-  "https://knowledge-single-textbooks-las.trycloudflare.com/auth/shopify/callback",
-  "https://knowledge-single-textbooks-las.trycloudflare.com/api/auth/callback",
-  "https://knowledge-single-textbooks-las.trycloudflare.com/.shopify/graphiql/auth/callback"
+  "https://performed-april-combination-twin.trycloudflare.com/auth/callback",
+  "https://performed-april-combination-twin.trycloudflare.com/auth/shopify/callback",
+  "https://performed-april-combination-twin.trycloudflare.com/api/auth/callback",
+  "https://performed-april-combination-twin.trycloudflare.com/.shopify/graphiql/auth/callback"
 ]
 
 [webhooks]

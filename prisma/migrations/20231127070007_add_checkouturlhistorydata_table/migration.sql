@@ -1,0 +1,7 @@
+-- CreateTable
+CREATE TABLE "CheckoutUrlHistoryData" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "customerId" TEXT NOT NULL,
+    "checkoutId" TEXT NOT NULL,
+    "sentAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
