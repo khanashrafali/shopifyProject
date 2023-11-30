@@ -2,11 +2,20 @@ import invariant from "tiny-invariant";
 import sendTwilioMessage from "../helpers/twilio";
 import db from "../db.server";
 
-export async function getAbondonedCarts(admin, session) {
+export async function getAbondonedCarts(admin, session,days, query) {
   try {
+    const queryParams = {
+
+    };
+console.log('dayssss===========>', days)
+    // Conditionally add the created_at_min parameter if days is provided
+    if (days) {
+      queryParams.created_at_min = daysAgo(days);
+    }
     const response = await admin.rest.get({
       path: "/checkouts.json",
       limit: "1",
+      query: queryParams
     });
     const checkouts = await response.json();
     // console.log("checkout=================>", checkouts.checkouts[0].customer);
@@ -40,6 +49,13 @@ export async function getAbondonedCarts(admin, session) {
     console.error("Error fetching abandoned carts:", error);
     throw error;
   }
+}
+
+function daysAgo(days) {
+  const today = new Date();
+  const daysAgoDate = new Date(today);
+  daysAgoDate.setDate(today.getDate() - days);
+  return daysAgoDate.toISOString();
 }
 
 export async function sendSms(url, to, checkoutData) {
